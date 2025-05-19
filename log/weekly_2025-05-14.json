@@ -1,0 +1,20 @@
+[
+  {
+    "timestamp": "2025-05-14T09:28:26.661Z",
+    "step": "sendWeekly",
+    "status": "sent",
+    "message": "Wochenprognose erfolgreich verschickt",
+    "user": "caroline gaidies",
+    "email": "christoph@fairyland.berlin",
+    "file": "weekly/caroline_gaidies_wochenprognose.txt"
+  },
+  {
+    "timestamp": "2025-05-14T09:29:26.433Z",
+    "step": "sendWeekly",
+    "status": "sent",
+    "message": "Wochenprognose erfolgreich verschickt",
+    "user": "caroline gaidies",
+    "email": "christoph@fairyland.berlin",
+    "file": "weekly/caroline_gaidies_wochenprognose.txt"
+  }
+]

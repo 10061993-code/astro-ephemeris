@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Caroline",
+    "birthdate": "1993-06-10",
+    "birthtime": "10:57",
+    "birthplace": "Hamburg, Deutschland",
+    "email": "caroline@example.com"
+  },
+  {
+    "name": "Lena",
+    "birthdate": "1990-02-15",
+    "birthtime": "08:20",
+    "birthplace": "München, Deutschland",
+    "email": "lena@example.com"
+  },
+  {
+    "name": "Anna",
+    "birthdate": "1987-11-23",
+    "birthtime": "18:45",
+    "birthplace": "Wien, Österreich",
+    "email": "anna@example.com"
+  }
+]

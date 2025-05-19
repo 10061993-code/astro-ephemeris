@@ -1,0 +1,109 @@
+{
+  "name": "Caroline Gaidies",
+  "birthDate": "1993-06-10",
+  "birthTime": "10:57",
+  "birthplace": "Hamburg, Deutschland",
+  "latitude": 53.550341,
+  "longitude": 10.000654,
+  "timezone": "Europe/Berlin",
+  "aszendent": {
+    "degree": "168.38",
+    "sign": "Jungfrau"
+  },
+  "mediumCoeli": {
+    "degree": "74.39",
+    "sign": "Zwillinge"
+  },
+  "planets": {
+    "Sonne": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Mond": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Merkur": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Venus": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Mars": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Jupiter": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Saturn": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Uranus": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Neptun": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    },
+    "Pluto": {
+      "degree": "91.99",
+      "sign": "Krebs"
+    }
+  },
+  "houses": {
+    "Haus 1": {
+      "degree": "168.38",
+      "sign": "Jungfrau"
+    },
+    "Haus 2": {
+      "degree": "190.22",
+      "sign": "Waage"
+    },
+    "Haus 3": {
+      "degree": "218.67",
+      "sign": "Skorpion"
+    },
+    "Haus 4": {
+      "degree": "254.39",
+      "sign": "Schütze"
+    },
+    "Haus 5": {
+      "degree": "292.11",
+      "sign": "Steinbock"
+    },
+    "Haus 6": {
+      "degree": "323.55",
+      "sign": "Wassermann"
+    },
+    "Haus 7": {
+      "degree": "348.38",
+      "sign": "Fische"
+    },
+    "Haus 8": {
+      "degree": "10.22",
+      "sign": "Widder"
+    },
+    "Haus 9": {
+      "degree": "38.67",
+      "sign": "Stier"
+    },
+    "Haus 10": {
+      "degree": "74.39",
+      "sign": "Zwillinge"
+    },
+    "Haus 11": {
+      "degree": "112.11",
+      "sign": "Krebs"
+    },
+    "Haus 12": {
+      "degree": "143.55",
+      "sign": "Löwe"
+    }
+  }
+}

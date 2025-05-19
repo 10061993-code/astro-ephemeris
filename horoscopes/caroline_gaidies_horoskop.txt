@@ -1,0 +1,60 @@
+
+🌌 PLANETENPOSITIONEN:
+☀️ Sonne steht bei: 189.20°
+🌙 Mond steht bei: 296.04°
+☿ Merkur steht bei: 193.82°
+♀ Venus steht bei: 200.74°
+♂ Mars steht bei: 227.33°
+♃ Jupiter steht bei: 250.75°
+♄ Saturn steht bei: 349.97°
+♅ Uranus steht bei: 296.53°
+♆ Neptun steht bei: 292.78°
+♇ Pluto steht bei: 238.65°
+
+🏠 HÄUSER (house):
+Haus 1: 103.34°
+Haus 2: 118.09°
+Haus 3: 135.17°
+Haus 4: 158.22°
+Haus 5: 193.32°
+Haus 6: 242.38°
+Haus 7: 283.34°
+Haus 8: 298.09°
+Haus 9: 315.17°
+Haus 10: 338.22°
+Haus 11: 13.32°
+Haus 12: 62.38°
+
+🔗 ASPEKTE:
+☀️ Sonne Konjunktion ☿ 
+Merkur (4.62°)
+☀️ Sonne Sextil ♃ 
+Jupiter (61.55°)
+🌙 Mond Quadrat ♀ 
+Venus (95.30°)
+🌙 Mond Konjunktion ♅ 
+Uranus (0.49°)
+🌙 Mond Konjunktion ♆ 
+Neptun (3.26°)
+🌙 Mond Sextil ♇ 
+Pluto (57.39°)
+☿ Merkur Konjunktion ♀ 
+Venus (6.92°)
+☿ Merkur Sextil ♃ 
+Jupiter (56.93°)
+♀ Venus Quadrat ♅ 
+Uranus (95.79°)
+♀ Venus Quadrat ♆ 
+Neptun (92.03°)
+♂ Mars Trigon ♄ 
+Saturn (122.64°)
+♂ Mars Sextil ♆ 
+Neptun (65.45°)
+♄ Saturn Sextil ♆ 
+Neptun (57.20°)
+♅ Uranus Konjunktion ♆ 
+Neptun (3.76°)
+♅ Uranus Sextil ♇ 
+Pluto (57.89°)
+♆ Neptun Sextil ♇ 
+Pluto (54.13°)
