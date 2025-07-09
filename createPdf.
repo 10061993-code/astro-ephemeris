@@ -1,0 +1,40 @@
+import fs from 'fs';
+import path from 'path';
+import puppeteer from 'puppeteer';
+import { fileURLToPath } from 'url';
+
+// ESM-kompatible __dirname erzeugen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+ * Erstellt ein PDF aus HTML-Inhalt und speichert es im passenden Ordner
+ * @param {Object} user - Nutzerobjekt mit mindestens user.name
+ * @param {string} htmlContent - HTML-Inhalt für das PDF
+ * @param {string} type - 'birth' oder 'weekly' (bestimmt Zielordner und Dateinamen)
+ * @returns {Promise<string>} Pfad zur gespeicherten Datei
+ */
+export default async function createPdf(user, htmlContent, type = 'birth') {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // PDF-Inhalt setzen
+  await page.setContent(`<html><body>${htmlContent}</body></html>`, {
+    waitUntil: 'networkidle0'
+  });
+
+  // Sicheren Dateinamen generieren
+  const safeName = user.name.toLowerCase().replace(/[^a-z0-9]/gi, '_');
+  const filename = `${safeName}_${type}.pdf`;
+
+  // Ausgabeordner bestimmen
+  const outputDir = type === 'birth' ? 'birthcharts' : 'weekly';
+  const outputPath = path.join(__dirname, outputDir, filename);
+
+  // PDF erzeugen
+  await page.pdf({ path: outputPath, format: 'A4' });
+
+  await browser.close();
+  return outputPath;
+}
+

@@ -1,34 +1,38 @@
-import sys
-import json
 import swisseph as swe
-import pytz
+import sys
 from datetime import datetime
+import pytz
+import json
 
-if len(sys.argv) != 6:
-    print("Usage: calculate_houses.py <date> <time> <latitude> <longitude> <timezone>")
-    sys.exit(1)
+def calculate_houses(date_str, time_str, lat_str, lon_str, tz_str):
+    lat = float(lat_str)
+    lon = float(lon_str)
 
-date_str = sys.argv[1]
-time_str = sys.argv[2]
-latitude = float(sys.argv[3])
-longitude = float(sys.argv[4])
-timezone_str = sys.argv[5]
+    local = pytz.timezone(tz_str)
+    local_dt = local.localize(datetime.strptime(f"{date_str} {time_str}", '%Y-%m-%d %H:%M:%S'))
+    utc_dt = local_dt.astimezone(pytz.utc)
 
-local = pytz.timezone(timezone_str)
-dt_local = local.localize(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M"))
-dt_utc = dt_local.astimezone(pytz.utc)
+    jd_ut = swe.julday(
+        utc_dt.year, utc_dt.month, utc_dt.day,
+        utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
+    )
 
-jd = swe.julday(dt_utc.year, dt_utc.month, dt_utc.day, dt_utc.hour + dt_utc.minute / 60)
+    houses, asc = swe.houses(jd_ut, lat, lon, b'K')
+    mc = houses[9]  # 10. Haus = MC (Index 9)
 
-# ✅ Hier ist der korrigierte Teil:
-cusps, ascmc = swe.houses(jd, latitude, longitude, b'P')
-asc = ascmc[0]
-mc = ascmc[1]
+    result = {
+        "houses": list(houses),
+        "ascendant": asc[0],
+        "mc": mc,
+        "local_time": local_dt.isoformat()
+    }
 
-result = {
-    "ascendant": asc,
-    "midheaven": mc,
-    "houses": {f"house_{i+1}": cusps[i] for i in range(12)}
-}
+    print(json.dumps(result))
 
-print(json.dumps(result))
+if __name__ == "__main__":
+    if len(sys.argv) != 6:
+        print("Usage: calculate_houses.py <YYYY-MM-DD> <HH:MM:SS> <latitude> <longitude> <timezone>")
+        sys.exit(1)
+
+    calculate_houses(*sys.argv[1:])
+

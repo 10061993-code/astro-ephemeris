@@ -1,41 +1,42 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+console.log("OPENAI_API_KEY:", process.env.OPENAI_API_KEY ? "gesetzt" : "NICHT gesetzt");
+import dotenv from 'dotenv';
+dotenv.config();
+console.log("OpenAI API Key:", process.env.OPENAI_API_KEY ? "Ist gesetzt" : "NICHT gesetzt");
+import { calculateHouses } from './calculateHouses.js';
+import { generateHoroscopeText } from './generateHoroscopeText.js';
 
-const users = JSON.parse(fs.readFileSync('users.json', 'utf-8'));
+async function generateHoroscopeForUser(user) {
+  try {
+    // 1. Häuser, Aszendent, MC aus Python berechnen
+    const astroData = await calculateHouses(
+      user.birthDate,
+      user.birthTime,
+      user.latitude,
+      user.longitude,
+      user.timezone
+    );
 
-// Output-Ordner sicherstellen
-const outputDir = path.join(__dirname, 'horoscopes');
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir);
+    console.log('Astrologische Daten:', astroData);
+
+    // 2. GPT-Text mit den astrologischen Daten generieren
+    const horoscopeText = await generateHoroscopeText(astroData, user);
+
+    console.log(`Horoskop für ${user.name}:\n`, horoscopeText);
+
+    // Hier kannst du den Text speichern, versenden, etc.
+
+  } catch (error) {
+    console.error('Fehler bei der Horoskop-Generierung:', error);
+  }
 }
 
-users.forEach(user => {
-  const name = user['Dein Name'];
-  const birthDate = new Date(user['Dein Geburtsdatum']);
-  const birthTime = user['Deine Geburtsuhrzeit'];
-  const birthPlace = user['Dein Geburtsort'];
-
-  const [hour, minute] = birthTime.split('.').map(Number);
-  const dateString = `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, 
-'0')}-${String(birthDate.getDate()).padStart(2, '0')}T${String(hour).padStart(2, 
-'0')}:${String(minute).padStart(2, '0')}:00`;
-
-  console.log(`🚀 Generiere Horoskop für ${name} (${birthPlace}, ${dateString})`);
-
-  try {
-    const output = execSync(`node calculate.js "${dateString}" "${birthPlace}"`, { encoding: 'utf-8' });
-
-    console.log(`📝 Output erhalten für ${name}...`);
-    
-    const safeFilename = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const filepath = path.join(outputDir, `${safeFilename}_horoskop.txt`);
-
-    fs.writeFileSync(filepath, output);
-    console.log(`✅ Gespeichert unter: ${filepath}`);
-  } catch (err) {
-    console.error(`❌ Fehler bei ${name}:`, err.message);
-  }
+// 3. Testaufruf mit Beispiel-Nutzerdaten
+generateHoroscopeForUser({
+  name: "Christoph",
+  birthDate: "1993-06-10",
+  birthTime: "10:57:00",
+  latitude: 53.5511,
+  longitude: 9.9937,
+  timezone: "Europe/Berlin"
 });
-
 

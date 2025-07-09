@@ -1,0 +1,56 @@
+{
+  "ascendant": "Virgo",
+  "planets": {
+    "sun": {
+      "sign": "Gemini",
+      "house": 12
+    },
+    "moon": {
+      "sign": "Pisces",
+      "house": 6
+    },
+    "mercury": {
+      "sign": "Cancer",
+      "house": 12
+    },
+    "venus": {
+      "sign": "Taurus",
+      "house": 12
+    },
+    "mars": {
+      "sign": "Leo",
+      "house": 12
+    },
+    "jupiter": {
+      "sign": "Libra",
+      "house": 1
+    },
+    "saturn": {
+      "sign": "Pisces",
+      "house": 6
+    },
+    "uranus": {
+      "sign": "Capricorn",
+      "house": 4
+    },
+    "neptune": {
+      "sign": "Capricorn",
+      "house": 4
+    },
+    "pluto": {
+      "sign": "Scorpio",
+      "house": 3
+    }
+  },
+  "elements": {
+    "fire": 1,
+    "earth": 3,
+    "air": 2,
+    "water": 4
+  },
+  "modalities": {
+    "cardinal": 4,
+    "fixed": 3,
+    "mutable": 3
+  }
+}

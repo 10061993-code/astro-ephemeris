@@ -1,0 +1,103 @@
+{
+  "birth": {
+    "name": "Caroline",
+    "email": "caroline@example.com",
+    "date": "1993-06-10",
+    "time": "10:57",
+    "place": "Hamburg, Deutschland",
+    "latitude": 53.550341,
+    "longitude": 10.000654,
+    "timezone": "Europe/Berlin"
+  },
+  "jd": 2449148.872916667,
+  "planets": [
+    {
+      "name": "Sun",
+      "position": 79.49053742288386,
+      "sign": "Gemini",
+      "house": 10
+    },
+    {
+      "name": "Moon",
+      "position": 328.9947945642704,
+      "sign": "Aquarius",
+      "house": 7
+    },
+    {
+      "name": "Mercury",
+      "position": 102.692890347973,
+      "sign": "Cancer",
+      "house": 11
+    },
+    {
+      "name": "Venus",
+      "position": 33.724307870903594,
+      "sign": "Taurus",
+      "house": 9
+    },
+    {
+      "name": "Mars",
+      "position": 142.64975016558716,
+      "sign": "Leo",
+      "house": 12
+    },
+    {
+      "name": "Jupiter",
+      "position": 184.8872071517139,
+      "sign": "Libra",
+      "house": 2
+    },
+    {
+      "name": "Saturn",
+      "position": 330.3277962178548,
+      "sign": "Pisces",
+      "house": 7
+    },
+    {
+      "name": "Uranus",
+      "position": 291.41457119049966,
+      "sign": "Capricorn",
+      "house": 5
+    },
+    {
+      "name": "Neptune",
+      "position": 290.57092699182783,
+      "sign": "Capricorn",
+      "house": 5
+    },
+    {
+      "name": "Pluto",
+      "position": 233.4373163576911,
+      "sign": "Scorpio",
+      "house": 4
+    },
+    {
+      "name": "Ascendant",
+      "position": 147.85026985930082,
+      "sign": "Leo",
+      "house": 1
+    },
+    {
+      "name": "Midheaven (MC)",
+      "position": 45.44458782379333,
+      "sign": "Taurus",
+      "house": 10
+    }
+  ],
+  "houses": [
+    147.85026985930082,
+    166.68498928262358,
+    191.81269988219114,
+    225.4445878237933,
+    265.32408028741224,
+    300.50880043061966,
+    327.85026985930085,
+    346.6849892826236,
+    11.812699882191168,
+    45.44458782379333,
+    85.32408028741226,
+    120.50880043061963
+  ],
+  "ascendant": 147.85026985930082,
+  "mc": 45.44458782379333
+}

@@ -1,165 +1,119 @@
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
-const puppeteer = require("puppeteer");
-require("dotenv").config();
-const OpenAI = require("openai");
+const fs = require('fs');
+const path = require('path');
+const { getTransitsForUser } = require('./getTransits');
+const { getPromptStyle } = require('./promptStyle');
+const { OpenAI } = require('openai');
+const createPdf = require('./utils/createPdf'); // ✅ PDF-Erstellung einbinden
+
+require('dotenv').config();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const users = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "users.json"), "utf8"));
+// 📅 Nächsten Sonntag berechnen
+const currentDate = new Date();
+const nextSunday = new Date(currentDate);
+nextSunday.setDate(currentDate.getDate() + ((7 - currentDate.getDay()) % 7));
+nextSunday.setHours(0, 0, 0, 0);
 
-function getUpcomingSunday(date) {
-  const sunday = new Date(date);
-  sunday.setDate(sunday.getDate() + ((7 - sunday.getDay()) % 7));
-  return sunday.toISOString().split("T")[0];
-}
+// 📁 Nutzer:innen laden
+const users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
-function getLastSunday(date) {
-  const sunday = new Date(date);
-  sunday.setDate(sunday.getDate() - sunday.getDay());
-  return sunday.toISOString().split("T")[0];
-}
+// ✨ Stiltext laden
+const promptStyle = getPromptStyle();
 
-function log(msg) {
-  const timestamp = new Date().toLocaleString("de-DE");
-  fs.appendFileSync("log/scheduler.log", `[${timestamp}] ${msg}\n`);
-}
-
-function sanitizeFileName(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, "_");
-}
-
-function exportMarkdown(name, content, date) {
-  const filename = `${sanitizeFileName(name)}_${date}.md`;
-  const filepath = path.join(__dirname, "exports_markdown", filename);
-  fs.writeFileSync(filepath, content);
-  console.log(`📝 Markdown exportiert für ${name}: ${filepath}`);
-}
-
-function exportHTML(name, content, date) {
-  const filename = `${sanitizeFileName(name)}_${date}.html`;
-  const filepath = path.join(__dirname, "exports_html", filename);
-  const html = `
-    <html lang="de"><head><meta charset="UTF-8" />
-    <title>Wochenhoroskop für ${name}</title></head>
-    <body style="font-family:sans-serif;padding:2rem;max-width:700px;margin:auto;white-space:pre-wrap;">
-    ${content}
-    </body></html>
-  `;
-  fs.writeFileSync(filepath, html);
-  console.log(`🌐 HTML exportiert für ${name}: ${filepath}`);
-}
-
-async function exportPDF(name, content, date) {
-  const filename = `${sanitizeFileName(name)}_${date}.pdf`;
-  const filepath = path.join(__dirname, "exports_pdf", filename);
-  const browser = await puppeteer.launch({ headless: "new" });
-  const page = await browser.newPage();
-
-  const html = `
-    <html lang="de"><head><meta charset="UTF-8" />
-    <style>body{font-family:sans-serif;padding:2rem;max-width:700px;margin:auto;white-space:pre-wrap;}</style>
-    </head><body>${content}</body></html>
-  `;
-  await page.setContent(html);
-  await page.pdf({ path: filepath, format: "A4" });
-  await browser.close();
-
-  console.log(`📄 PDF exportiert für ${name}: ${filepath}`);
-}
-
-async function createWeeklyRecap(user, date) {
-  const name = user.name.toLowerCase();
-  const currentPath = path.join(__dirname, "weekly", `${name}_weekly.txt`);
-  const lastWeekPath = path.join(__dirname, "weekly_archive", `${name}_${getLastSunday(date)}.txt`);
-
-  if (!fs.existsSync(currentPath) || !fs.existsSync(lastWeekPath)) {
-    console.log(`⚠️ Rückblick übersprungen für ${user.name} (fehlende Archivdatei)`);
-    return;
-  }
-
-  const previous = fs.readFileSync(lastWeekPath, "utf8");
-  const current = fs.readFileSync(currentPath, "utf8");
-
-  const prompt = `
-Du bist eine moderne Astrologin. Erstelle einen einleitenden Rückblick zur aktuellen Woche, basierend auf der Prognose der letzten Woche.
-
-- Maximal 5 Sätze
-- Keine Wiederholung des alten Textes
-- Tonalität: empathisch, reflektierend, nicht esoterisch
-- Beginne mit: „Im Vergleich zur letzten Woche…“
-
-Letzte Woche:
-${previous}
-
-Diese Woche:
-${current}
-
-Rückblick:
-`;
-
+// 🧠 Funktion zur GPT-Vorhersage + PDF-Erstellung
+async function generateForecast(user) {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+    // Transite berechnen
+    const astroUser = {
+      name: user.name,
+      birthdate: user.geburtsdatum,
+      birthtime: user.geburtszeit,
+      birthplace: user.geburtsort,
+      lat: user.lat,
+      lon: user.lon,
+      email: user.email
+    };
+
+    const transits = getTransitsForUser(astroUser, nextSunday);
+
+    // Vorwoche laden
+    const lastWeekPath = path.join(__dirname, 'weekly_archive', `${user.name.toLowerCase()}_last.json`);
+    const lastWeek = fs.existsSync(lastWeekPath)
+      ? JSON.parse(fs.readFileSync(lastWeekPath, 'utf8'))
+      : { gptText: '' };
+
+    // Prompt vorbereiten
+    const prompt = {
+      user: astroUser,
+      transits,
+      lastWeek: { gptText: lastWeek.gptText },
+      instruction: `Falls sich relevante Themen aus der Vorwoche fortsetzen – z. B. durch wiederkehrende Transite,
+längerfristige Entwicklungen oder emotionale Prozesse – kannst du zu Beginn einen kurzen Rückblick einbauen. Wenn
+sich die Themen jedoch deutlich verändern oder kein Bezug besteht, beginne direkt mit der neuen Woche.`,
+      style: promptStyle
+    };
+
+    // GPT anfragen
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: 'Du bist eine reflektierte astrologische Begleiterin mit psychologischer Tiefe.' },
+        { role: 'user', content: JSON.stringify(prompt) }
+      ]
     });
 
-    const recap = response.choices[0].message.content.trim();
-    fs.writeFileSync(currentPath, `${recap}\n\n${current}`);
-    console.log(`🧠 Rückblick ergänzt für ${user.name}`);
+    const gptText = completion.choices[0].message.content.trim();
+
+    // Ergebnis als JSON speichern
+    const filename = `${user.name.toLowerCase()}_weekly.json`;
+    const outputPath = path.join(__dirname, 'weekly', filename);
+    fs.writeFileSync(outputPath, JSON.stringify({ gptText }, null, 2));
+
+    console.log(`✅ Wochenprognose gespeichert für ${user.name}`);
+
+    // PDF-Export vorbereiten
+    const htmlContent = `
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: sans-serif; line-height: 1.6; padding: 2rem; }
+            h1 { font-size: 1.5rem; }
+          </style>
+        </head>
+        <body>
+          <h1>Wochenprognose für ${user.name}</h1>
+          <p>${gptText.replace(/\n/g, '<br>')}</p>
+        </body>
+      </html>
+    `;
+
+    const today = new Date().toISOString().split("T")[0];
+    const pdfPath = await createPdf({
+      htmlContent,
+      userId: user.id?.toString() || user.name.toLowerCase(),
+      creatorId: "default",
+      date: today,
+      type: "weekly"
+    });
+
+    console.log(`📄 PDF erzeugt unter: ${pdfPath}`);
+
   } catch (err) {
-    console.error(`❌ Rückblicksfehler bei ${user.name}: ${err.message}`);
+    console.error(`❌ Fehler bei ${user.name}:`, err.message);
   }
 }
 
-async function prepareWeekly() {
-  const date = new Date();
-  const sunday = getUpcomingSunday(date);
-  log("📅 Starte Vorbereitung der Wochenprognosen...");
-
+// 🔁 Alle Nutzer:innen verarbeiten
+async function runAll() {
   for (const user of users) {
-    const name = user.name.toLowerCase();
-
-    // 1. Archivieren
-    const oldPath = path.join(__dirname, "weekly", `${name}_weekly.txt`);
-    if (fs.existsSync(oldPath)) {
-      const archivePath = path.join(__dirname, "weekly_archive", `${name}_${getLastSunday(date)}.txt`);
-      fs.copyFileSync(oldPath, archivePath);
-      log(`📦 Wochenprognose archiviert für ${user.name}: ${archivePath}`);
+    if (!user.name || !user.geburtsdatum || !user.geburtszeit || !user.lat || !user.lon) {
+      console.warn(`⚠️ Nutzer ${user.name || '[unbekannt]'} hat unvollständige Daten – übersprungen.`);
+      continue;
     }
-
-    // 2. Transite generieren
-    try {
-      execSync(`node generateTransits.js --user ${name}`, { stdio: "ignore" });
-    } catch {
-      console.log(`⚠️ Fehler beim Transit-Export für ${user.name}`);
-    }
-
-    // 3. Wochenhoroskop generieren
-    try {
-      execSync(`node createWeekly.js --user ${name}`, { stdio: "ignore" });
-    } catch {
-      console.log(`⚠️ Fehler beim Text-Export für ${user.name}`);
-    }
-
-    // 4. GPT-Rückblick
-    await createWeeklyRecap(user, date);
-
-    // 5. Exportieren
-    const weeklyPath = path.join(__dirname, "weekly", `${name}_weekly.txt`);
-    if (fs.existsSync(weeklyPath)) {
-      const content = fs.readFileSync(weeklyPath, "utf8");
-      const exportDate = getUpcomingSunday(date);
-
-      exportMarkdown(user.name, content, exportDate);
-      exportHTML(user.name, content, exportDate);
-      await exportPDF(user.name, content, exportDate);
-    }
+    await generateForecast(user);
   }
-
-  log("✅ Prognosen vorbereitet.");
 }
 
-prepareWeekly();
+runAll();
 

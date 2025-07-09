@@ -1,115 +1,119 @@
-// generateHoroscope.js
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
-const swisseph = require("swisseph");
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+const swisseph = require('swisseph');
 
-swisseph.swe_set_ephe_path(path.join(__dirname, "ephe")); // Stelle sicher, dass die ephe-Dateien vorhanden sind
+// Swiss Ephemeris Pfad setzen
+swisseph.swe_set_ephe_path(path.join(__dirname, 'ephe'));
 
-const users = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "users.json"), "utf8"));
-const outputDir = path.join(__dirname, "horoscope");
-if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+// Beispiel-Geburtsdaten
+const birth = {
+  name: "Caroline",
+  email: "caroline@example.com",
+  date: "1993-06-10",
+  time: "10:57",
+  place: "Hamburg, Deutschland",
+  latitude: 53.550341,
+  longitude: 10.000654,
+  timezone: "Europe/Berlin" // nur informativ
+};
 
-function parseDateTime(dateStr, timeStr, timezone) {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  const [hour, minute] = timeStr.split(":").map(Number);
+// Zeit in UTC umrechnen
+const date = new Date(`${birth.date}T${birth.time}:00`);
+const utcHours = date.getUTCHours() + date.getUTCMinutes() / 60;
+const jd = swisseph.swe_julday(
+  date.getUTCFullYear(),
+  date.getUTCMonth() + 1,
+  date.getUTCDate(),
+  utcHours,
+  swisseph.SE_GREG_CAL
+);
 
-  const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
-  const localTime = new Date(date.toLocaleString("en-US", { timeZone: timezone }));
-  const utcTime = new Date(localTime.toISOString());
+// Häuser berechnen
+const houseData = swisseph.swe_houses(jd, birth.latitude, birth.longitude, 'P');
 
-  return {
-    year: utcTime.getUTCFullYear(),
-    month: utcTime.getUTCMonth() + 1,
-    day: utcTime.getUTCDate(),
-    hour: utcTime.getUTCHours() + utcTime.getUTCMinutes() / 60
-  };
+if (!houseData || !houseData.house) {
+  console.error("❌ Fehler bei Häuserberechnung: Hausdaten fehlen");
+  process.exit(1);
 }
 
-function getPlanetPositions(julianDay) {
-  const planets = [
-    swisseph.SE_SUN,
-    swisseph.SE_MOON,
-    swisseph.SE_MERCURY,
-    swisseph.SE_VENUS,
-    swisseph.SE_MARS,
-    swisseph.SE_JUPITER,
-    swisseph.SE_SATURN,
-    swisseph.SE_URANUS,
-    swisseph.SE_NEPTUNE,
-    swisseph.SE_PLUTO
-  ];
+// Tierkreiszeichen-Zuordnung
+const signs = [
+  "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+];
 
-  const planetNames = [
-    "Sun",
-    "Moon",
-    "Mercury",
-    "Venus",
-    "Mars",
-    "Jupiter",
-    "Saturn",
-    "Uranus",
-    "Neptune",
-    "Pluto"
-  ];
-
-  const positions = {};
-
-  planets.forEach((planet, i) => {
-    const pos = swisseph.swe_calc_ut(julianDay, planet, swisseph.SEFLG_SWIEPH);
-    positions[planetNames[i]] = pos.longitude;
-  });
-
-  return positions;
+function getSign(lon) {
+  return signs[Math.floor(lon / 30)];
 }
 
-async function generate() {
-  for (const user of users) {
-    const { name, birth } = user;
-    const { year, month, day, hour } = parseDateTime(birth.date, birth.time, birth.timezone);
-
-    // Berechne Julian Day
-    const julianDay = swisseph.swe_julday(year, month, day, hour, swisseph.SE_GREG_CAL);
-
-    // Planetenpositionen berechnen
-    const planetPositions = getPlanetPositions(julianDay);
-
-    // Python-Skript für AC, MC, Häuser aufrufen
-    const args = [
-      birth.date,
-      birth.time,
-      birth.latitude,
-      birth.longitude,
-      birth.timezone
-    ];
-
-    const houseDataRaw = execSync(`python3 calculate_houses.py ${args.join(" ")}`, {
-      encoding: "utf8"
-    });
-
-    let houseData = {};
-    try {
-      houseData = JSON.parse(houseDataRaw);
-    } catch (err) {
-      console.error(`❌ Fehler beim Parsen von houseData für ${name}:`, err.message);
-      continue;
-    }
-
-    const result = {
-      name,
-      email: user.email,
-      birth,
-      planets: planetPositions,
-      ascendant: houseData.ascendant,
-      midheaven: houseData.midheaven,
-      houses: houseData.houses
-    };
-
-    const filename = name.toLowerCase().replace(/\s+/g, "_") + "_horoscope.json";
-    const outputPath = path.join(outputDir, filename);
-    fs.writeFileSync(outputPath, JSON.stringify(result, null, 2), "utf8");
-    console.log(`✅ Horoskop gespeichert für ${name}: ${outputPath}`);
+function getHouse(lon, cusps) {
+  for (let i = 0; i < 12; i++) {
+    const start = cusps[i];
+    const end = cusps[(i + 1) % 12] < start ? cusps[(i + 1) % 12] + 360 : cusps[(i + 1) % 12];
+    const adjLon = lon < start ? lon + 360 : lon;
+    if (adjLon >= start && adjLon < end) return i + 1;
   }
+  return null;
 }
 
-generate();
+// Planeten berechnen
+const planetList = [
+  { id: swisseph.SE_SUN, name: "Sun" },
+  { id: swisseph.SE_MOON, name: "Moon" },
+  { id: swisseph.SE_MERCURY, name: "Mercury" },
+  { id: swisseph.SE_VENUS, name: "Venus" },
+  { id: swisseph.SE_MARS, name: "Mars" },
+  { id: swisseph.SE_JUPITER, name: "Jupiter" },
+  { id: swisseph.SE_SATURN, name: "Saturn" },
+  { id: swisseph.SE_URANUS, name: "Uranus" },
+  { id: swisseph.SE_NEPTUNE, name: "Neptune" },
+  { id: swisseph.SE_PLUTO, name: "Pluto" }
+];
+
+const results = [];
+
+planetList.forEach(planet => {
+  const pos = swisseph.swe_calc_ut(jd, planet.id, swisseph.SEFLG_SWIEPH);
+  if (pos.error) {
+    console.error(`❌ Fehler bei Berechnung von ${planet.name}:`, pos.error);
+    return;
+  }
+  results.push({
+    name: planet.name,
+    position: pos.longitude,
+    sign: getSign(pos.longitude),
+    house: getHouse(pos.longitude, houseData.house)
+  });
+});
+
+// Aszendent und MC hinzufügen
+results.push({
+  name: "Ascendant",
+  position: houseData.ascendant,
+  sign: getSign(houseData.ascendant),
+  house: 1
+});
+
+results.push({
+  name: "Midheaven (MC)",
+  position: houseData.mc,
+  sign: getSign(houseData.mc),
+  house: 10
+});
+
+// Ergebnis speichern
+const outputDir = path.join(__dirname, 'output', 'birthcharts');
+fs.mkdirSync(outputDir, { recursive: true });
+const fileName = `horoscope-${Date.now()}.json`;
+fs.writeFileSync(path.join(outputDir, fileName), JSON.stringify({
+  birth,
+  jd,
+  planets: results,
+  houses: houseData.house,
+  ascendant: houseData.ascendant,
+  mc: houseData.mc
+}, null, 2));
+
+console.log(`✅ Geburtshoroskop erfolgreich erstellt: output/birthcharts/${fileName}`);
+

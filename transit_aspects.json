@@ -1,0 +1,154 @@
+[
+  {
+    "transit_planet": "moon",
+    "transit_position": 132.5,
+    "birth_planet": "sun",
+    "birth_position": 75,
+    "aspect": "sextile",
+    "orb": 2.5
+  },
+  {
+    "transit_planet": "moon",
+    "transit_position": 132.5,
+    "birth_planet": "venus",
+    "birth_position": 45,
+    "aspect": "square",
+    "orb": 2.5
+  },
+  {
+    "transit_planet": "moon",
+    "transit_position": 132.5,
+    "birth_planet": "mars",
+    "birth_position": 135,
+    "aspect": "conjunction",
+    "orb": 2.5
+  },
+  {
+    "transit_planet": "moon",
+    "transit_position": 132.5,
+    "birth_planet": "jupiter",
+    "birth_position": 195,
+    "aspect": "sextile",
+    "orb": 2.5
+  },
+  {
+    "transit_planet": "moon",
+    "transit_position": 132.5,
+    "birth_planet": "pluto",
+    "birth_position": 225,
+    "aspect": "square",
+    "orb": 2.5
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "sun",
+    "birth_position": 75,
+    "aspect": "sextile",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "mercury",
+    "birth_position": 105,
+    "aspect": "square",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "mars",
+    "birth_position": 135,
+    "aspect": "trine",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "jupiter",
+    "birth_position": 195,
+    "aspect": "opposition",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "uranus",
+    "birth_position": 285,
+    "aspect": "square",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "venus",
+    "transit_position": 15.0,
+    "birth_planet": "neptune",
+    "birth_position": 285,
+    "aspect": "square",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "moon",
+    "birth_position": 345,
+    "aspect": "sextile",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "mercury",
+    "birth_position": 105,
+    "aspect": "sextile",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "venus",
+    "birth_position": 45,
+    "aspect": "conjunction",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "mars",
+    "birth_position": 135,
+    "aspect": "square",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "saturn",
+    "birth_position": 345,
+    "aspect": "sextile",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "uranus",
+    "birth_position": 285,
+    "aspect": "trine",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "neptune",
+    "birth_position": 285,
+    "aspect": "trine",
+    "orb": 0.0
+  },
+  {
+    "transit_planet": "uranus",
+    "transit_position": 45.0,
+    "birth_planet": "pluto",
+    "birth_position": 225,
+    "aspect": "opposition",
+    "orb": 0.0
+  }
+]

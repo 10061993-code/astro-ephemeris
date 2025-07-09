@@ -1,0 +1,34 @@
+{
+  "planets": {
+    "sun": {
+      "longitude": 60.0
+    },
+    "moon": {
+      "longitude": 132.5
+    },
+    "mercury": {
+      "longitude": 90.0
+    },
+    "venus": {
+      "longitude": 15.0
+    },
+    "mars": {
+      "longitude": 120.5
+    },
+    "jupiter": {
+      "longitude": 210.0
+    },
+    "saturn": {
+      "longitude": 300.0
+    },
+    "uranus": {
+      "longitude": 45.0
+    },
+    "neptune": {
+      "longitude": 330.0
+    },
+    "pluto": {
+      "longitude": 270.0
+    }
+  }
+}

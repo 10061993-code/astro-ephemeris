@@ -1,0 +1,16 @@
+{
+  "name": "Caroline",
+  "elements": {
+    "Feuer": 0,
+    "Erde": 0,
+    "Luft": 0,
+    "Wasser": 0
+  },
+  "modalities": {
+    "Kardinal": 0,
+    "Fix": 0,
+    "Beweglich": 0
+  },
+  "houseCluster": [],
+  "dominantPlanet": null
+}

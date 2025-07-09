@@ -1,33 +1,24 @@
-const NodeGeocoder = require('node-geocoder');
-const tzlookup = require('tz-lookup');
+import fetch from 'node-fetch';
+import NodeGeocoder from 'node-geocoder';
+import tzlookup from 'tz-lookup';
 
-const options = {
+// Erstelle einen Geocoder (OpenStreetMap)
+const geocoder = NodeGeocoder({
   provider: 'openstreetmap',
-};
+});
 
-const geocoder = NodeGeocoder(options);
-
-/**
- * Wandelt einen Ort in Koordinaten + Zeitzone um
- * @param {string} placeName - z. B. "Hamburg, Deutschland"
- * @returns {Promise<{ latitude: number, longitude: number, timezone: string }>}
- */
-async function geocode(placeName) {
-  const res = await geocoder.geocode(placeName);
-
+// Funktion, die Koordinaten und Zeitzone basierend auf einem Ort liefert
+export async function getCoordinatesAndTimezone(place) {
+  // Koordinaten ermitteln
+  const res = await geocoder.geocode(place);
   if (!res || res.length === 0) {
-    throw new Error(`Ort nicht gefunden: "${placeName}"`);
+    throw new Error(`Ort nicht gefunden: ${place}`);
   }
+  const { latitude: lat, longitude: lon } = res[0];
 
-  const { latitude, longitude } = res[0];
-  const timezone = tzlookup(latitude, longitude);
+  // Zeitzone ermitteln
+  const timezone = tzlookup(lat, lon);
 
-  return {
-    latitude,
-    longitude,
-    timezone
-  };
+  return { lat, lon, timezone };
 }
-
-module.exports = geocode;
 

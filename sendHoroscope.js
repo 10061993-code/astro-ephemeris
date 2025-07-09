@@ -1,46 +1,72 @@
-const fs = require('fs');
-const path = require('path');
-const nodemailer = require('nodemailer');
-const users = require('./users.json');
 require('dotenv').config();
+const fs = require('fs');
+const nodemailer = require('nodemailer');
+const path = require('path');
+const users = require('./users.json');
 
-const BASE_URL = process.env.PUBLIC_URL || 'https://example.com';
+const horoscopeFolder = './horoscope';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD
   }
 });
 
-users.forEach((user) => {
-  const nameSlug = user.name.toLowerCase().replace(/\s+/g, '_');
-  const htmlPath = path.join(__dirname, 'horoscopes', `${nameSlug}_birth.html`);
-  const pdfFile = `${nameSlug}_birth.pdf`;
-  const pdfUrl = `${BASE_URL}/horoscopes/${pdfFile}`;
+async function sendHoroscope() {
+  for (const user of users) {
+    const safeName = user.name.toLowerCase().replace(/ /g, '_');
+    const filePath = path.join(horoscopeFolder, `${safeName}_horoscope.json`);
+    const pdfPath = path.join(horoscopeFolder, `${safeName}_horoscope.pdf`);
+    const pdfUrl = `${process.env.PUBLIC_URL}/horoscope/${safeName}_horoscope.pdf`;
 
-  const htmlContent = fs.existsSync(htmlPath)
-    ? fs.readFileSync(htmlPath, 'utf-8')
-    : `<p>Dein Geburtshoroskop ist leider nicht verfügbar.</p>`;
-
-  const mailOptions = {
-    from: `"Astro Newsletter" <${process.env.MAIL_USER}>`,
-    to: user.email,
-    subject: '✨ Dein persönliches Geburtshoroskop',
-    html: `${htmlContent}
-      <p>📎 <strong>Du möchtest dein Horoskop speichern?</strong><br />
-      <a href="${pdfUrl}">👉 Hier kannst du es als PDF herunterladen</a></p>`
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(`❌ Fehler beim Senden an ${user.email}:`, error);
-    } else {
-      console.log(`✅ Horoskop gesendet an ${user.email}:`, info.response);
+    if (!fs.existsSync(filePath)) {
+      console.warn(`⚠️ Kein Horoskop für ${user.name} gefunden.`);
+      continue;
     }
-  });
-});
+
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const gptText = data.gptText;
+
+    const trackingPixel = `<img src="${process.env.PUBLIC_URL}/track?user=${encodeURIComponent(user.email)}" 
+width="1" height="1" style="display:none;" alt="" />`;
+
+    const pdfNotice = fs.existsSync(pdfPath)
+      ? `<p><a href="${pdfUrl}">🔗 Hier kannst du dein Geburtshoroskop als PDF herunterladen</a></p>`
+      : '';
+
+    const htmlBody = `
+      <html>
+        <body style="font-family: sans-serif; line-height: 1.6;">
+          <p>Liebe ${user.name},</p>
+          <p>${gptText}</p>
+          ${pdfNotice}
+          ${trackingPixel}
+          <p style="font-size: 0.8em; color: #777;">
+            Diese E-Mail enthält ein anonymes Öffnungs-Tracking zur Verbesserung unseres Angebots.
+          </p>
+        </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: user.email,
+      subject: 'Willkommen – dein persönliches Geburtshoroskop',
+      html: htmlBody
+    };
+
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`✅ Mail an ${user.email} gesendet: ${info.response}`);
+    } catch (error) {
+      console.error(`❌ Fehler beim Senden an ${user.email}:`, error.message);
+    }
+  }
+}
+
+sendHoroscope();
 

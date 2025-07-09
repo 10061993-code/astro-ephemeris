@@ -1,0 +1,14 @@
+{
+  "anna@example.com": {
+    "sent": 2,
+    "last": "2025-05-25T06:09:33.568Z"
+  },
+  "lena@example.com": {
+    "sent": 2,
+    "last": "2025-05-25T06:09:33.737Z"
+  },
+  "caroline@example.com": {
+    "sent": 2,
+    "last": "2025-05-25T06:09:32.343Z"
+  }
+}
