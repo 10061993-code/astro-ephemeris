@@ -1,3 +1,4 @@
+// prepareWeekly.js
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -49,7 +50,7 @@ async function generateForecast(user) {
       transits,
       lastWeek: { gptText: lastWeek.gptText },
       instruction: `Falls sich relevante Themen aus der Vorwoche fortsetzen – z. B. durch wiederkehrende Transite,
-längerfristige Entwicklungen oder emotionale Prozesse – kannst du zu Beginn einen kurzen Rückblick einbauen. Wenn sich die Themen jedoch deutlich verändern oder 
+längerfristige Entwicklungen oder emotionale Prozesse – kannst du zu Beginn einen kurzen Rückblick einbauen. Wenn sich die Themen jedoch deutlich verändern oder
 kein Bezug besteht, beginne direkt mit der neuen Woche.`,
       style: promptStyle
     };

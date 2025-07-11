@@ -1,3 +1,37 @@
 {
-  "gptText": "Liebe Lena,\n\ndeine kommende Woche könnte sich durch eine besondere Energie und Harmonie kennzeichnen. Ein spannendes Ereignis am astrologischen Himmel steuert deinem inneren Universum entgegen: Am 24. Mai formt Mars ein Trigon zu deiner Venus. Genieße diesen positiven Aspekt voll und ganz! \n\nWas bedeutet das konkret für dich? Mars ist bekannt als der Planet des Antriebs und der Energie, während Venus die Schönheit, Harmonie und Zuneigung symbolisiert. Wenn diese zwei Kräfte in einem positiven Aspekt zusammentreffen, entsteht ein wirklich magischer Moment. Ein Moment, den man in deinen Beziehungen und sozialen Interaktionen bemerken könnte. \n\nVielleicht spürst du einen aufkommenden Schwung, eine neue Energie, die du in deine Beziehungen einbringst. Warte nicht darauf, dass die Harmonie und Zuneigung von der anderen Seite eintrifft, sondern ergreife selbst die Initiative. Zeige den Menschen um dich herum deine Wertschätzung und lass sie an deiner Freude teilhaben.\n\nAber denke dabei auch an dich selbst, Lena. Manchmal kann das Erstreben von Harmonie in den Beziehungen zu anderen auch dazu führen, dass wir uns selbst vergessen. Sei also auch mit dir selbst harmonisch. Nutze diese Woche, um Verständnis und Liebe auf dich selbst zu richten. \n\nDu bist eine dynamische und liebevolle Frau, Lena. Lasse diese Eigenschaften in dieser Woche leuchten und scheue dich nicht davor, sie mit anderen zu teilen. Erinnere dich stets daran, dass du kapabel bist, Harmonie und positive Energie in jedes Gespräch, jede Beziehung und jeden Moment zu bringen. \n\nGenieße diese kraftvolle Energie, die sich in der kommenden Woche entfaltet. Folge deinem Herzen und lass dich von deiner inneren Venus leiten. Nutze diese Chance, um die Verbindungen zu stärken, die dir wertvoll sind.\n\nAlles Liebe,\ndeine astrologische Begleiterin"
+  "name": "Lena",
+  "date": "2025-07-09T19:04:26.033Z",
+  "text": "Liebe Lena,\n\nwir stehen nun an der Türschwelle einer neuen Woche und wie jedes neue Kapitel, bietet es Raum für Wachstum und Reflexion. Die kosmischen Strömungen werfen ihre Schatten voraus, bereit, dich durch den Tanz des Alltags zu führen. Vergiss nicht: Du bist die Choreographin in deinem eigenen Leben. \n\nAm 8. Juli tritt Mars, der Planet des Antriebs und der Kämpfernatur, in ein Quadrat zu deinem Mond. Emotionen könnten brodeln und auf der Oberfläche schwappen, als ob ein innerer Vulkan kurz vor dem Ausbruch steht. Fühle diese Energie, aber vor allem: Drücke sie aus. Male, tanze, schreibe oder sprich – nutze den kreativen Kanal, der dir am nächsten liegt, um die innere Unruhe zu verwandeln und zu einem Ausdruck deines Selbst zu machen. \n\nVergangene Woche hast du dich auf die Harmonie in deinem Umfeld konzentriert. Nun ist es Zeit, diese Energie auf dich selbst zu lenken. Wie kannst du in Harmonie mit deinen Emotionen stehen, auch wenn sie herausfordernd sein mögen? Sei mutig, Lena, und nimm dir die Freiheit, zu fühlen.\n\nAm 10. Juli bildet Saturn, der alte Meister der Disziplin und Struktur, ein Trigon zu deiner Sonne. Du stehst an der Schwelle, eine neue Struktur in deiner Berufung zu finden, eine klare Linie in dem farbenfrohen Kaleidoskop deiner Ambitionen und Träume. Diese Energie kann dich stabilisieren und dir helfen, den Weg zu dem zu finden, was du wirklich in der Welt manifestieren möchtest. Vielleicht entsteht in dieser Woche eine Vision, ein Plan oder einfach nur ein kleiner, aber klarer Schritt in die richtige Richtung.\n\nEine besondere Konstellation erwartet dich dann zum Wochenende: Venus, die Göttin der Liebe und Schönheit, trifft am 12. Juli in einer Konjunktion auf deinen Aszendenten. Diese Begegnung könnte dich mit einer Tiefe und einem Magnetismus in Beziehungen erfüllen, der deine Welt buchstäblich auf den Kopf stellen könnte. Sei offen für tiefgreifende Begegnungen, für Gespräche, die das Herz berühren, und für das wunderbare Geheimnis des Echtseins in Beziehungen.\n\nDurch das Labyrinth der Woche führt letztendlich dein innerer Kompass. Denke daran, dass du immer die Wahl hast, wie du auf die kosmischen Strömungen reagieren möchtest. Sei mutig, liebe dich selbst, und bleib offen für das, was das Universum dir zeigen möchte.\n\nAlles Liebe für deine Woche, \ndeine astrologische Begleiterin.",
+  "transits": {
+    "week": "2025-07-07 bis 2025-07-13",
+    "transits": [
+      {
+        "planet": "Saturn",
+        "aspect": "Trigon",
+        "target": "Sonne",
+        "exact": "2025-07-10",
+        "orb": "0°45",
+        "type": "Langzeittransit",
+        "theme": "Struktur finden in deiner Berufung"
+      },
+      {
+        "planet": "Mars",
+        "aspect": "Quadrat",
+        "target": "Mond",
+        "exact": "2025-07-08",
+        "orb": "0°30",
+        "type": "Kurzfristiger Transit",
+        "theme": "Innere Spannungen aktiv ausdrücken"
+      },
+      {
+        "planet": "Venus",
+        "aspect": "Konjunktion",
+        "target": "Aszendent",
+        "exact": "2025-07-12",
+        "orb": "0°10",
+        "type": "Beziehungsimpuls",
+        "theme": "Begegnungen mit Tiefe und Magnetismus"
+      }
+    ]
+  }
 }

@@ -1,0 +1,16 @@
+body {
+  font-family: 'Georgia', serif;
+  background-color: #fff0f5;
+  color: #4b0082;
+  padding: 2rem;
+}
+button {
+  background-color: #ffb6c1;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+

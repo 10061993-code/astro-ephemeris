@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Dein Horoskop ist da ✨</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #222;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Liebe*r {{name}},</h2>
+  <p>deine persönliche Horoskop-Vorschau ist jetzt bereit. Du kannst sie direkt hier anschauen:</p>
+
+  <p><a href="{{htmlUrl}}" class="button">👉 Vorschau öffnen</a></p>
+
+  <p>Oder als PDF herunterladen:</p>
+  <p><a href="{{pdfUrl}}" class="button">📄 PDF herunterladen</a></p>
+
+  <p>✨ Viel Freude beim Eintauchen! Dein LUZID-Team</p>
+</body>
+</html>
+

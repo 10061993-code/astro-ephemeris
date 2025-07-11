@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Dein Horoskop – {{name}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{cssPath}}">
+</head>
+<body>
+  <div class="preview-container">
+    <h1>✨ Dein persönliches Horoskop, {{name}}!</h1>
+    <p>Du kannst dein Horoskop hier direkt anschauen oder herunterladen:</p>
+
+    <div class="buttons">
+      <a href="{{htmlUrl}}" target="_blank" class="btn">👉 Horoskop ansehen (HTML)</a>
+      <a href="{{pdfUrl}}" target="_blank" class="btn">📄 PDF herunterladen</a>
+    </div>
+  </div>
+</body>
+</html>
+

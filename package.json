@@ -10,11 +10,13 @@
   "author": "Dein Name",
   "license": "MIT",
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.5",
     "better-sqlite3": "^12.1.1",
     "cors": "^2.8.5",
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
+    "nodemailer": "^7.0.5",
     "openai": "^5.8.2",
-    "puppeteer": "^24.11.1"
+    "puppeteer": "^24.12.1"
   }
 }

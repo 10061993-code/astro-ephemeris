@@ -1,40 +1,49 @@
-// createPdf.js
 import fs from 'fs/promises';
+import path from 'path';
 import puppeteer from 'puppeteer';
+import { fileURLToPath } from 'url';
+import { movePdfToPublic } from './utils/moveToPublic.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export async function createPdf({ user, text, date }, outputDir = 'weekly') {
-  const html = `
-  <html>
-    <head>
-      <meta charset="utf-8">
-      <title>Geburtshoroskop</title>
-      <style>
-        body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
-        h1 { color: #222; font-size: 24px; }
-        p { margin-bottom: 1em; }
-      </style>
-    </head>
-    <body>
-      <h1>🌟 Geburtshoroskop für ${user.name}</h1>
-      <p><strong>Geburtsdatum:</strong> ${user.birthDate}</p>
-      <p><strong>Geburtszeit:</strong> ${user.birthTime}</p>
-      <p><strong>Geburtsort:</strong> ${user.birthPlace}</p>
-      <p><strong>Erstellt am:</strong> ${date}</p>
-      <hr />
-      ${text.split('\n').map(line => `<p>${line}</p>`).join('')}
-    </body>
-  </html>
-  `;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-  const safeName = user.name.toLowerCase().replace(/[^a-z0-9]/gi, '_');
-  const filePath = `${outputDir}/${safeName}_birth.pdf`;
+async function createPdf(name) {
+  const htmlPath = path.join(__dirname, 'public', 'weekly', `${name}_weekly.html`);
+  const outputPath = path.join(__dirname, 'weekly', `${name}_weekly.pdf`);
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'networkidle0' });
-  await page.pdf({ path: filePath, format: 'A4' });
-  await browser.close();
+  try {
+    const html = await fs.readFile(htmlPath, 'utf8');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
 
-  console.log(`✅ PDF gespeichert unter: ${filePath}`);
+    await page.pdf({
+      path: outputPath,
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '30mm', bottom: '30mm', left: '20mm', right: '20mm' },
+    });
+
+    await browser.close();
+    console.log(`✅ PDF gespeichert unter ${outputPath}`);
+
+    // PDF automatisch ins public-Verzeichnis verschieben:
+    const publicLink = await movePdfToPublic(`${name}_weekly.pdf`);
+    if (publicLink) {
+      console.log(`🌐 Öffentlicher Link: ${publicLink}`);
+    }
+
+  } catch (error) {
+    console.error('❌ Fehler bei der PDF-Erstellung:', error);
+  }
 }
+
+const name = process.argv[2];
+if (!name) {
+  console.error('❌ Bitte gib einen Namen an, z. B.: node createPdf.js lena');
+  process.exit(1);
+}
+
+createPdf(name);
 
