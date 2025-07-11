@@ -1,2 +1,7 @@
+node_modules/
 .env
+*.pdf
+*.html
+*.json
+.DS_Store
 
