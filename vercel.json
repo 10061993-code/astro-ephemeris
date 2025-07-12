@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/preview/:path*", "destination": "/view/:path*" },
+    { "source": "/birth/:path*", "destination": "/birth/:path*" },
+    { "source": "/partner/:path*", "destination": "/partner/:path*" },
+    { "source": "/weekly/:path*", "destination": "/weekly/:path*" }
+  ]
+}
+
